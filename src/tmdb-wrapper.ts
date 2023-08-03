@@ -4,7 +4,7 @@ require("dotenv").config();
 export async function fetchNewMovies() {
   const options = {
     method: "GET",
-    url: "https://api.themoviedb.org/3/trending/movies/day",
+    url: "https://api.themoviedb.org/3/trending/movie/day",
     headers: {
       accept: "application/json",
       Authorization: "Bearer " + process.env.BEARER,
@@ -50,8 +50,23 @@ export async function fetchMovieDetail(id : string) {
       accept: "application/json",
       Authorization: "Bearer " + process.env.BEARER,
     },
-  };
+  };``
   var response = await axios.request(options);
   //console.log(response)
   return response.data;
 }
+
+export async function fetchMovieVideo(id : string) {
+    const options = {
+      method: "GET",
+      url: "https://api.themoviedb.org/3/movie/"+id+"/videos",
+      headers: {
+        accept: "application/json",
+        Authorization: "Bearer " + process.env.BEARER,
+      },
+    };``
+    var response = await axios.request(options);
+    //console.log(response)
+    return response.data;
+  }
+  

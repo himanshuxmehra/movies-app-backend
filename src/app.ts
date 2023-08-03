@@ -1,5 +1,5 @@
 import express from "express";
-import { fetchDiscoveryFeed, fetchMovieDetail, fetchNewMovies } from "./tmdb-wrapper";
+import { fetchDiscoveryFeed, fetchMovieDetail, fetchMovieVideo, fetchNewMovies } from "./tmdb-wrapper";
 import cors from "cors";
 
 const app = express();
@@ -42,12 +42,28 @@ app.get("/fetchDiscoveryFeed", async (req, res) => {
 app.get("/fetchMovieDetail/:id", async (req, res) => {
   fetchMovieDetail(req.params.id)
     .then((data) => {
-      console.log(data);
+      //console.log(data);
       res.json(data);
     })
     .catch((error) => {
       // Handle any errors that occur during the Promise execution
       //console.error("Error fetching data:", error);
+      res.status(500).json({ error: "Failed to fetch data" });
+    });
+});
+
+app.get("/fetchMovieDetail/video/:id", async (req, res) => {
+  fetchMovieVideo(req.params.id)
+    .then((data) => {
+      //console.log(data);
+      data.results.map((video:any)=>(
+        video.type === 'Trailer' && video.site === 'Youtube' ?
+        res.json(video): console.log(video)
+      ))
+    })
+    .catch((error) => {
+      // Handle any errors that occur during the Promise execution
+      console.error("Error fetching data:", error);
       res.status(500).json({ error: "Failed to fetch data" });
     });
 });
