@@ -9,7 +9,6 @@ import cors from "cors";
 require("dotenv").config();
 
 const app = express();
-const port = 3300;
 const whitelist = [process.env.REACTAPP_URL];
 console.log(whitelist);
 const corsOptions = {
@@ -88,7 +87,7 @@ app.get("/fetchMovieDetail/video/:id", async (req, res) => {
       res.status(500).json({ error: "Failed to fetch data" });
     });
 });
-
+const port = process.env.REACTAPP_URL;
 app.listen(port, () => {
   return console.log(`Express is listening at http://localhost:${port}`);
 });
