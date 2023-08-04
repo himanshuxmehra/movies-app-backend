@@ -1,14 +1,32 @@
 import express from "express";
-import { fetchDiscoveryFeed, fetchMovieDetail, fetchMovieVideo, fetchNewMovies } from "./tmdb-wrapper";
+import {
+  fetchDiscoveryFeed,
+  fetchMovieDetail,
+  fetchMovieVideo,
+  fetchNewMovies,
+} from "./tmdb-wrapper";
 import cors from "cors";
+require("dotenv").config();
 
 const app = express();
 const port = 3300;
-
+const whitelist = [process.env.REACTAPP_URL];
+console.log(whitelist);
 const corsOptions = {
-  origin: ["http://localhost:3000"],
+  origin: whitelist,
+  credentials: true,
+  allowedHeaders: ["Content-Type"],
+  methods: ["GET", "POST"],
 };
 app.use(cors(corsOptions));
+
+app.use(function (req, res, next) {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  res.setHeader("Access-Control-Allow-Credentials", true);
+  next();
+});
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
@@ -18,6 +36,8 @@ app.get("/fetchNewMovies", async (req, res) => {
   fetchNewMovies()
     .then((data) => {
       console.log(data);
+
+      res.setHeader("Access-Control-Allow-Headers", "Content-Type");
       res.json(data);
     })
     .catch((error) => {
@@ -56,10 +76,11 @@ app.get("/fetchMovieDetail/video/:id", async (req, res) => {
   fetchMovieVideo(req.params.id)
     .then((data) => {
       //console.log(data);
-      data.results.map((video:any)=>(
-        video.type === 'Trailer' && video.site === 'Youtube' ?
-        res.json(video): console.log(video)
-      ))
+      data.results.map((video: any) =>
+        video.type === "Trailer" && video.site === "Youtube"
+          ? res.json(video)
+          : console.log(video)
+      );
     })
     .catch((error) => {
       // Handle any errors that occur during the Promise execution
