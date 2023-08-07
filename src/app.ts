@@ -87,7 +87,7 @@ app.get("/fetchMovieDetail/video/:id", async (req, res) => {
       res.status(500).json({ error: "Failed to fetch data" });
     });
 });
-const port = process.env.REACTAPP_URL;
+const port = process.env.PORT;
 app.listen(port, () => {
   return console.log(`Express is listening at http://localhost:${port}`);
 });
