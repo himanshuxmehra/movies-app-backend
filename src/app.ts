@@ -80,6 +80,7 @@ app.get("/fetchMovieDetail/video/:id", async (req, res) => {
           ? res.json(video)
           : console.log(video)
       );
+      res.json(data);
     })
     .catch((error) => {
       // Handle any errors that occur during the Promise execution
